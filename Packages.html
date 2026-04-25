@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>Special Packages | Adama Hotel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+<style>
+        :root {
+            --gold: #D4AF37;
+            --charcoal: #0a0a0a;
+            --bg: #0a0a0a;
+            --text: #ffffff;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glow: rgba(212, 175, 55, 0.08);
+        }
+
+        /* Light Mode Overrides */
+        .light {
+            --bg: #f8f8f8;
+            --text: #1a1a1a;
+            --glass: rgba(0, 0, 0, 0.03);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --glow: rgba(212, 175, 55, 0.05);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .font-luxury { font-family: 'Montserrat', sans-serif; }
+
+        /* Golden Corner Glows */
+        .glow {
+            position: fixed; width: 40%; height: 40%;
+            background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        .glow-tl { top: -10%; left: -10%; }
+        .glow-br { bottom: -10%; right: -10%; }
+
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .input-luxury {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1rem;
+            width: 100%;
+            color: inherit;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .light .input-luxury { background: rgba(0, 0, 0, 0.02); }
+        .input-luxury:focus { border-color: var(--gold); }
+
+        .btn-gold {
+            background: var(--gold);
+            color: #000;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s ease;
+        }
+        .btn-gold:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="glow glow-tl"></div>
+    <div class="glow glow-br"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-[100] glass border-b border-white/5 py-5 px-10">
+        <div class="max-w-[1800px] mx-auto flex justify-between items-center">
+            <div class="text-2xl font-black tracking-tighter text-[--gold]">ADAMA HOTEL</div>
+            <div class="hidden lg:flex space-x-12 text-[10px] font-bold uppercase tracking-[0.3em] opacity-70">
+                <a href="index.html" class="hover:text-[--gold] transition">Home</a>
+                <a href="showroom.html" class="hover:text-[--gold] transition">Showroom</a>
+                <a href="packages.html" class="hover:text-[--gold] transition">Packages</a>
+                <a href="booking.html" class="text-[--gold]">Booking</a>
+                <a href="contact.html" class="hover:text-[--gold] transition">Contact</a>
+            </div>
+            <div class="flex items-center gap-6">
+                <button onclick="toggleTheme()" class="p-2 rounded-full border border-[--glass-border] hover:text-[--gold] transition">
+                    <i data-lucide="sun" id="theme-icon"></i>
+                </button>
+                <button class="lg:hidden"><i data-lucide="menu"></i></button>
+            </div>
+        </div>
+    </nav>
+</head>
+<body class="pt-32">
+    <div class="container mx-auto px-8 pb-20">
+        <h2 class="text-5xl font-luxury text-center mb-16">Exclusive Packages</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">            
+        <!-- Romantic -->
+        <div class="glass p-4 rounded-[40px] reveal">
+            <img src="https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&w=800" class="h-80 w-full object-cover rounded-[30px] mb-6">
+            <div class="px-4 pb-6">
+                <h3 class="text-2xl text-white font-bold mb-2">Couple's Getaway</h3>
+                <p class="text-[--gold] font-black text-xl mb-4">8,500 ETB <span class="text-xs text-white/50">/ Night</span></p>                
+                <button onclick="openModal('romantic')" class="w-full py-4 rounded-2xl border border-[--gold] text-[--gold] font-bold uppercase text-xs hover:bg-[--gold] hover:text-black transition">Full Itinerary</button>
+            </div>
+        </div>
+
+        <!-- Family -->
+        <div class="glass p-4 rounded-[40px] reveal">
+            <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800" class="h-80 w-full object-cover rounded-[30px] mb-6">
+            <div class="px-4 pb-6">
+                <h3 class="text-2xl text-white font-bold mb-2">Family Adventure</h3>
+                <p class="text-[--gold] font-black text-xl mb-4">12,000 ETB</p>              
+                <button onclick="openModal('family')" class="w-full py-4 rounded-2xl border border-[--gold] text-[--gold] font-bold uppercase text-xs hover:bg-[--gold] hover:text-black transition">Full Itinerary</button>
+            </div>
+        </div>
+
+        <!-- Wellness -->
+        <div class="glass p-4 rounded-[40px] reveal">
+            <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=800" class="h-80 w-full object-cover rounded-[30px] mb-6">
+            <div class="px-4 pb-6">
+                <h3 class="text-2xl text-white font-bold mb-2">Wellness & Spa</h3>
+                <p class="text-[--gold] font-black text-xl mb-4">7,000 ETB</p>         
+                <button onclick="openModal('wellness')" class="w-full py-4 rounded-2xl border border-[--gold] text-[--gold] font-bold uppercase text-xs hover:bg-[--gold] hover:text-black transition">Full Itinerary</button>
+            </div>
+        </div>
+
+        <!-- Honeymoon (NEW) -->
+        <div class="glass p-4 rounded-[40px] reveal">
+            <img src="https://images.unsplash.com/photo-1507038772120-7fff76f79d79?auto=format&fit=crop&w=800" class="h-80 w-full object-cover rounded-[30px] mb-6">
+            <div class="px-4 pb-6">
+                <h3 class="text-2xl text-white font-bold mb-2">Royal Honeymoon</h3>
+                <p class="text-[--gold] font-black text-xl mb-4">25,000 ETB</p> 
+               <button onclick="openModal('honeymoon')" class="w-full py-4 rounded-2xl border border-[--gold] text-[--gold] font-bold uppercase text-xs hover:bg-[--gold] hover:text-black transition">Full Itinerary</button>
+            </div>
+        </div>
+
+        <!-- Diplomatic (NEW) -->
+        <div class="glass p-4 rounded-[40px] reveal">
+            <img src="https://images.unsplash.com/photo-1573348722427-f1d6819fdf98?auto=format&fit=crop&w=800" class="h-80 w-full object-cover rounded-[30px] mb-6">
+            <div class="px-4 pb-6">
+                <h3 class="text-2xl text-white font-bold mb-2">Diplomatic Secure</h3>
+                <p class="text-[--gold] font-black text-xl mb-4">30,000 ETB</p>                
+                <button onclick="openModal('diplomatic')" class="w-full py-4 rounded-2xl border border-[--gold] text-[--gold] font-bold uppercase text-xs hover:bg-[--gold] hover:text-black transition">Full Itinerary</button>
+            </div>
+        </div>
+
+        <!-- Cultural (NEW) -->
+        <div class="glass p-4 rounded-[40px] reveal">
+            <img src="https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=800" class="h-80 w-full object-cover rounded-[30px] mb-6">
+            <div class="px-4 pb-6">
+                <h3 class="text-2xl text-white font-bold mb-2">Heritage Tour</h3>
+                <p class="text-[--gold] font-black text-xl mb-4">9,500 ETB</p>               
+                <button onclick="openModal('heritage')" class="w-full py-4 rounded-2xl border border-[--gold] text-[--gold] font-bold uppercase text-xs hover:bg-[--gold] hover:text-black transition">Full Itinerary</button>
+            </div>
+        </div>
+
+        <!-- Weekend Party (NEW) -->
+        <div class="glass p-4 rounded-[40px] reveal">
+            <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=800" class="h-80 w-full object-cover rounded-[30px] mb-6">
+            <div class="px-4 pb-6">
+                <h3 class="text-2xl text-white font-bold mb-2">Weekend Vibe</h3>
+                <p class="text-[--gold] font-black text-xl mb-4">5,500 ETB</p>               
+                 <button onclick="openModal('weekend')" class="w-full py-4 rounded-2xl border border-[--gold] text-[--gold] font-bold uppercase text-xs hover:bg-[--gold] hover:text-black transition">Full Itinerary</button>
+            </div>
+        </div>
+    </div>
+            </div>
+            <!-- More cards as defined in spec... -->
+        </div>
+    </div>
+
+    <!-- Modal Lightbox -->
+    <div id="packageModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal()"></div>
+        <div class="relative glass max-w-4xl w-full rounded-3xl overflow-hidden flex flex-col md:flex-row opacity-0 scale-90" id="modalContent">
+            <img id="modalImg" src="" class="md:w-1/2 h-96 md:h-auto object-cover">
+            <div class="p-10 md:w-1/2">
+                <h2 id="modalTitle" class="text-4xl font-luxury mb-4"></h2>
+                <ul id="modalList" class="space-y-3 mb-8 opacity-80"></ul>
+                <a href="booking.html" class="btn-gold px-8 py-4 rounded-xl font-bold uppercase inline-block">Book This Package</a>
+                <button onclick="closeModal()" class="absolute top-4 right-4 text-white"><i data-lucide="x"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        const data = {
+            romantic: {
+                title: "Romantic Getaway",
+                img: "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&w=800&q=80",
+                amenities: ["Candlelit dinner by the pool", "Rose-petal room decor", "Private balcony breakfast"]
+            },
+            family: {
+                title: "Family Holiday",
+                img: "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80",
+                amenities: ["Access to Enjoyment Park", "Kids' club activities", "Family suite with all meals"]
+            },
+            honeymoon: {
+                title: "Royal Honeymoon",
+                img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80",
+                amenities: ["VVIP Airport pickup", "Complimentary Champagne", "Private Jacuzzi setup", "Professional couple photoshoot"]
+            },
+    diplomatic: {
+        title: "Diplomatic Secure",
+        img: "https://images.unsplash.com/photo-1573348722427-f1d6819fdf98?auto=format&fit=crop&w=800&q=80",
+        amenities: ["Enhanced security protocols", "Bulletproof glass suite", "Secure private entrance", "24/7 Dedicated butler service"]
+    },
+    executive: {
+        title: "Executive Elite",
+        img: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
+        amenities: ["Business Lounge access", "High-speed Starlink WiFi", "Meeting room credits", "Laundry & pressing service"]
+    },
+    heritage: {
+        title: "Heritage Tour",
+        img: "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=800&q=80",
+        amenities: ["Guided tour of historic sites", "Traditional cultural dinner", "Local artisan gift basket", "Museum entrance tickets"]
+    },
+    weekend: {
+        title: "Weekend Vibe",
+        img: "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?auto=format&fit=crop&w=800&q=80",
+        amenities: ["Friday Night Party access", "Sunday Brunch buffet", "Poolside cocktails (2 free)", "Live music entertainment"]
+    },
+wellness: {
+        title: "Wellness & Spa",
+        img: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=800&q=80",
+        price: "7,000 ETB",
+        amenities: ["Full-day spa access", "Aromatherapy massage", "Herbal tea service", "Organic healthy dining options"]
+    },
+};
+        function openModal(key) {
+            const pkg = data[key];
+            document.getElementById('modalImg').src = pkg.img;
+            document.getElementById('modalTitle').innerText = pkg.title;
+            const list = document.getElementById('modalList');
+            list.innerHTML = pkg.amenities.map(a => `<li><i data-lucide="check" class="inline w-4 mr-2 text-[--gold]"></i>${a}</li>`).join('');
+            lucide.createIcons();
+            
+            const modal = document.getElementById('packageModal');
+            modal.classList.remove('hidden');
+            gsap.to('#modalContent', { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" });
+        }
+   
+        function closeModal() {
+            gsap.to('#modalContent', { opacity: 0, scale: 0.9, duration: 0.3, onComplete: () => {
+                document.getElementById('packageModal').classList.add('hidden');
+            }});
+        }
+    </script>
+</body>
+</html>

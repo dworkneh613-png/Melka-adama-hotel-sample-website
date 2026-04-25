@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melka Adama Hotel | Luxury Redefined</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass px-8 py-4 flex justify-between items-center">
+        <div class="text-2xl font-luxury text-[--gold] font-bold uppercase tracking-tighter">Adama Hotel</div>
+        <div class="hidden md:flex space-x-8 uppercase text-xs tracking-widest font-semibold">
+            <a href="index.html" class="hover:text-[--gold]">Home</a>
+            <a href="showroom.html" class="hover:text-[--gold]">Showroom</a>
+            <a href="packages.html" class="hover:text-[--gold]">Packages</a>
+            <a href="booking.html" class="hover:text-[--gold]">Booking</a>
+            <a href="contact.html" class="hover:text-[--gold]">Contact</a>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button onclick="toggleTheme()" class="hover:text-[--gold]"><i data-lucide="sun"></i></button>
+            <div class="flex space-x-2">
+                <a href="#"><i data-lucide="instagram" class="w-4"></i></a>
+                <a href="#"><i data-lucide="send" class="w-4"></i></a>
+            </div>
+        </div>
+    </nav>
+ <!-- Hero Section -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <img src="melka adama hotel.jpg"
+             class="absolute inset-0 w-full h-full object-cover" alt="Luxury Interior">
+        <div class="absolute inset-0 bg-black/20"></div>
+        
+        <div class="relative z-10 text-center text-white px-4">
+            <h1 class="text-6xl text-gold md:text-8xl font-black mb-4 animate-pulse">Welcome to Melka Adama.</h1>
+            <p class="text-xl tracking-[0.3em] uppercase mb-12">Adama </p>
+        </div>
+
+        <!-- Booking Bar -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 w-11/12 max-w-6xl">
+            <div class="glass p-8 rounded-2xl flex flex-wrap lg:flex-nowrap items-end gap-6">
+                <div class="flex-1 min-w-[150px]">
+                    <label class="block text-[--gold] text-[10px] uppercase font-bold mb-2">Branch</label>
+                    <select class="booking-bar-input w-full py-2">
+                        <option>Adama Branch</option>
+                        <option>Addis Ababa</option>
+                    </select>
+                </div>
+                <div class="flex-1 min-w-[150px]">
+                    <label class="block text-[--gold] text-[10px] uppercase font-bold mb-2">Check-In</label>
+                    <input type="date" class="booking-bar-input w-full py-2">
+                </div>
+                <div class="flex-1 min-w-[150px]">
+                    <label class="block text-[--gold] text-[10px] uppercase font-bold mb-2">Guests</label>
+                    <input type="number" placeholder="2" class="booking-bar-input w-full py-2">
+                </div>
+                <button class="btn-gold px-10 py-4 font-bold uppercase text-xs rounded-lg whitespace-nowrap">Check Availability</button>
+            </div>
+        </div>
+    </section>
+
+<!-- NEW: The Showroom Highlight -->
+<section id="explore" class="bg-[--charcoal]">
+    <div class="container-huge grid lg:grid-cols-2 gap-20 items-center">
+        <div class="reveal">
+            <h2 class="text-6xl font-luxury text-white mb-8">Architectural <br><span class="text-[--gold]">Masterpieces.</span></h2>
+            <p class="text-white/60 text-xl leading-relaxed mb-10">From our luxury meeting rooms&hall  world-class fitness centers, every corner of Adama Hotel is designed to inspire awe and provide ultimate comfort.</p>
+            <a href="showroom.html" class="text-[--gold] border-b-2 border-[--gold] pb-2 font-bold uppercase tracking-widest hover:text-white hover:border-white transition">Visit the Showroom</a>
+        </div>
+        <div class="grid grid-cols-2 gap-4 reveal">
+            <img src="guest.jpg" class="rounded-3xl h-80 w-full object-cover">
+            <img src="foods.jpg" class="rounded-3xl h-80 w-full object-cover mt-12">
+        </div>
+    </div>
+</section>
+
+<!-- NEW: Multi-Branch Detail -->
+<section class="bg-white text-black">
+    <div class="container-huge">
+        <div class="text-center mb-20">
+            <h2 class="text-6xl font-luxury mb-4">Strategic Locations</h2>
+            <p class="opacity-50 uppercase tracking-[0.3em]">The heart of Ethiopia's hospitality</p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-10">
+            <div class="relative group overflow-hidden rounded-[40px] h-[600px]">
+                <img src="MAH.jpg" class="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+                <div class="absolute bottom-12 left-12 text-white">
+                    <h3 class="text-4xl font-bold mb-2">Adama Expressway</h3>
+                    <p class="opacity-70 mb-6">Experience the warmth of the Rift Valley in absolute luxury.</p>
+                    <a href="booking.html" class="btn-gold px-8 py-3 rounded-xl text-black font-bold">Discover Adama</a>
+                </div>
+            </div>
+            <div class="relative group overflow-hidden rounded-[40px] h-[600px]">
+                <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1000" class="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+                <div class="absolute bottom-12 left-12 text-white">
+                    <h3 class="text-4xl font-bold mb-2">Addis Ababa Royal</h3>
+                    <p class="opacity-70 mb-6">The premier choice for global diplomats and business leaders.</p>
+                    <a href="booking.html" class="btn-gold px-8 py-3 rounded-xl text-black font-bold">Discover Addis</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+ <footer class="py-6 text-center text-xs opacity-50 tracking-widest border-t border-white/10">
+        Nexus Special Solution | Dawit Workneh 2026
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        lucide.createIcons();
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            document.documentElement.classList.toggle('light');
+        }
+    </script>
+</body>
+</html>

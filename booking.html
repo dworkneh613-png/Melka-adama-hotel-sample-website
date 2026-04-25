@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservation | Adama Hotel Group</title>
+    
+    <!-- Fonts & Libraries -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+<!-- Include Firebase & Flatpickr for Date Blocking -->
+<script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        /* This makes the dropdown list background black */
+.input-luxury option {
+    background-color: #c4c4c4 !important; /* Deep black background */
+    color: #000000e8 !important;           /* Pure white text */
+}
+
+/* This fixes the main select box background to be dark/transparent */
+select.input-luxury {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    color: white !important;
+}
+        :root {
+            --gold: #D4AF37;
+            --charcoal: #0a0a0a;
+            --bg: #0a0a0a;
+            --text: #f1f1f1;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glow: rgba(212, 175, 55, 0.08);
+        }
+
+        /* Light Mode Overrides */
+        .light {
+            --bg: #ffffffe7;
+            --text: #1a1a1a;
+            --glass: rgba(0, 0, 0, 0.03);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --glow: rgba(212, 175, 55, 0.05);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .font-luxury { font-family: 'Montserrat', sans-serif; }
+
+        /* Golden Corner Glows */
+        .glow {
+            position: fixed; width: 40%; height: 40%;
+            background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        .glow-tl { top: -10%; left: -10%; }
+        .glow-br { bottom: -10%; right: -10%; }
+
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .input-luxury {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1rem;
+            width: 100%;
+            color: inherit;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .light .input-luxury { background: rgba(0, 0, 0, 0.02); }
+        .input-luxury:focus { border-color: var(--gold); }
+
+        .btn-gold {
+            background: var(--gold);
+            color: #000;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s ease;
+        }
+        .btn-gold:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="glow glow-tl"></div>
+    <div class="glow glow-br"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-[100] glass border-b border-white/5 py-5 px-10">
+        <div class="max-w-[1800px] mx-auto flex justify-between items-center">
+            <div class="text-2xl font-black tracking-tighter text-[--gold]">ADAMA HOTEL</div>
+            <div class="hidden lg:flex space-x-12 text-[10px] font-bold uppercase tracking-[0.3em] opacity-70">
+                <a href="index.html" class="hover:text-[--gold] transition">Home</a>
+                <a href="showroom.html" class="hover:text-[--gold] transition">Showroom</a>
+                <a href="packages.html" class="hover:text-[--gold] transition">Packages</a>
+                <a href="booking.html" class="text-[--gold]">Booking</a>
+                <a href="contact.html" class="hover:text-[--gold] transition">Contact</a>
+            </div>
+            <div class="flex items-center gap-6">
+                <button onclick="toggleTheme()" class="p-2 rounded-full border border-[--glass-border] hover:text-[--gold] transition">
+                    <i data-lucide="sun" id="theme-icon"></i>
+                </button>
+                <button class="lg:hidden"><i data-lucide="menu"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 px-6">
+        <div class="max-w-[1400px] mx-auto" id="booking-container">
+            
+            <div class="text-center mb-16">
+                <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-4">Secure Your <span class="text-[--gold]">Legacy.</span></h1>
+                <p class="opacity-40 uppercase tracking-[0.5em] text-xs">Global Reservation Engine</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-10">
+                
+                <!-- Left: Dynamic Branch Intelligence -->
+                <div class="lg:col-span-1">
+                    <div id="branch-info-card" class="glass rounded-[40px] sticky top-32 overflow-hidden border-l-4 border-l-[--gold]">
+                        <!-- Dynamic Branch Image -->
+                        <div class="h-56 w-full overflow-hidden">
+                            <img id="b-image" src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80" 
+                                 class="w-full h-full object-cover transition-transform duration-1000 scale-105" alt="Branch">
+                        </div>
+                        
+                        <div class="p-10" id="branch-content">
+                            <h3 class="text-xs font-bold text-[--gold] uppercase tracking-widest mb-4">Destination Insight</h3>
+                            <h2 class="text-3xl font-luxury font-bold mb-4" id="b-name">Adama Luxury Branch</h2>
+                            <div class="space-y-4 text-sm opacity-70">
+                                <p class="flex items-center gap-4"><i data-lucide="map-pin" class="w-4 h-4 text-[--gold]"></i> <span id="b-addr">Main Expressway, Adama</span></p>
+                                <p class="flex items-center gap-4"><i data-lucide="phone" class="w-4 h-4 text-[--gold]"></i> <span id="b-phone">+251 22 111 2233</span></p>
+                            </div>
+                            <button class="mt-8 w-full py-4 rounded-xl border border-white/10 hover:bg-white/5 transition flex items-center justify-center gap-3 font-bold text-xs uppercase tracking-widest">
+                                <i data-lucide="navigation"></i> Show on Map
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Currency/Payment Detail -->
+                    <div class="glass p-6 mt-6 rounded-2xl flex items-center gap-4">
+                        <i data-lucide="shield-check" class="text-[--gold]"></i>
+                        <p class="text-[10px] opacity-50 uppercase tracking-widest">Accepted: <span class="text-[--text]">ETB, USD, EURO, GBP</span></p>
+                    </div>
+                </div>
+
+                <!-- Right: Massive Form Area -->
+                <div class="lg:col-span-2 space-y-8">
+                    <div class="glass p-8 md:p-12 rounded-[40px]">
+                        <form id="bookingForm" class="space-y-12">
+                            
+                            <!-- Destination Select -->
+                            <div class="space-y-4">
+                                <h4 class="text-[--gold] uppercase font-bold text-[10px] tracking-[0.3em] flex items-center gap-3">
+                                    <span class="w-8 h-px bg-[--gold]"></span> 01. Select Destination
+                                </h4>
+                                <select id="branchSelect" onchange="updateBranch()" class="input-luxury cursor-pointer">
+                                    <option value="adama">Adama Luxury Branch (Rift Valley View)</option>
+                                    <option value="addis">Addis Ababa Royal (Metropolitan Center)</option>
+                                </select>
+                            </div>
+
+                            <!-- Personal Info -->
+                            <div class="space-y-4">
+                                <h4 class="text-[--gold] uppercase font-bold text-[10px] tracking-[0.3em] flex items-center gap-3">
+                                    <span class="w-8 h-px bg-[--gold]"></span> 02. Personal & Traveler Information
+                                </h4>
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <input type="text" id="guestName" placeholder="Full Name" class="input-luxury">
+                                    <input type="email" id="guestEmail" placeholder="Email Address" class="input-luxury">
+                                    <input type="tel" id="guestPhone" placeholder="Phone Number (+...)" class="input-luxury">
+                                    <select class="input-luxury">
+                                        <option disabled selected>Country of Origin</option>
+                                        <option>Ethiopia</option><option>USA</option><option>UK</option>
+                                        <option>Germany</option><option>China</option><option>UAE</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Date Grid -->
+                            <div class="space-y-4">
+                                <h4 class="text-[--gold] uppercase font-bold text-[10px] tracking-[0.3em] flex items-center gap-3">
+                                    <span class="w-8 h-px bg-[--gold]"></span> 03. Stay & Occupancy
+                                </h4>
+                                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <div><label class="text-[9px] uppercase opacity-40 ml-1">Check-in</label><input type="date" id="checkIn" class="input-luxury"></div>
+                                    <div><label class="text-[9px] uppercase opacity-40 ml-1">Check-out</label><input type="date" id="checkOut" class="input-luxury"></div>
+                                    <div><label class="text-[9px] uppercase opacity-40 ml-1">Adults</label><input type="number" placeholder="2" class="input-luxury"></div>
+                                    <div><label class="text-[9px] uppercase opacity-40 ml-1">Children</label><input type="number" placeholder="0" class="input-luxury"></div>
+                                </div>
+                            </div>
+
+                            <!-- Package Selection -->
+                            <div class="space-y-4">
+                                <h4 class="text-[--gold] uppercase font-bold text-[10px] tracking-[0.3em] flex items-center gap-3">
+                                    <span class="w-8 h-px bg-[--gold]"></span> 04. Tailored Packages
+                                </h4>
+                                <select id="PackageSelect" class="input-luxury">
+                                    <option>Standard Luxury Stay</option>
+                                    <option>Romantic Couples Getaway</option>
+                                    <option>Family Holiday Adventure</option>
+                                    <option>Premium Executive Stay</option>
+                                    <option>Weekend Wellness & Spa</option>
+                                    <option>Royal Honeymoon Suite</option>
+                                    <option>Diplomatic Secure Wing</option>
+                                    <option>Grand metting room</option>
+                                    <option>grand meeting hall</option>
+                                    <option>Elite Fitness Gym</option>
+                                    <option>wedding ballroom&hall</option>
+                                    <option>Secure Car Parking</option>
+                                    <option>clean and luxury Room</option>
+                                </select>                                
+                            </div>
+
+                            <!-- Finalize -->
+                            <div class="pt-8">
+                                <button type="submit" class="btn-gold w-full py-6 rounded-2xl text-sm font-black shadow-xl">
+                                    Confirm My Reservation
+                                </button>
+                                <div class="flex justify-center items-center gap-6 mt-8 opacity-30 text-[9px] uppercase tracking-widest font-bold">
+                                    <span>No Pre-payment Required</span>
+                                    <span class="w-1 h-1 rounded-full bg-white"></span>
+                                    <span>Instant Confirmation</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Detail Cards (Depth) -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="glass p-8 rounded-3xl">
+                            <h5 class="font-bold mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+                                <i data-lucide="award" class="text-[--gold] w-4 h-4"></i> Elite Concierge
+                            </h5>
+                            <p class="text-xs opacity-50 leading-relaxed">Our 24/7 concierge is ready to handle airport transfers, city tours, and private event planning at no extra management cost.</p>
+                        </div>
+                        <div class="glass p-8 rounded-3xl">
+                            <h5 class="font-bold mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+                                <i data-lucide="info" class="text-[--gold] w-4 h-4"></i> Flexibility
+                            </h5>
+                            <p class="text-xs opacity-50 leading-relaxed">Modify your check-in dates up to 24 hours prior to arrival via our WhatsApp support channel or email.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-20 bg-black/20 border-t border-white/5 text-center">
+        <p class="text-[10px] font-bold uppercase tracking-[0.5em] opacity-40">
+            Nexus Special Solution | Dawit Workneh 2026
+        </p>
+    </footer>
+
+    <script>
+    // 1. INITIALIZE ICONS AND THEME ON LOAD
+    lucide.createIcons();
+    gsap.from("#booking-container", { y: 100, opacity: 0, duration: 1.5, ease: "expo.out" });
+
+    // 2. BRANCH DATA (Only one declaration allowed!)
+    const branchData = {
+        adama: {
+            name: "Adama Luxury Branch",
+            phone: "+251 22 111 2233",
+            addr: "Main Expressway, Adama",
+            image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80"
+        },
+        addis: {
+            name: "Addis Ababa Royal",
+            phone: "+251 58 444 5566",
+            addr: "Bole Area, Addis Ababa",
+            image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=800&q=80"
+        }
+    };
+
+    // 3. UI FUNCTIONS
+    function updateBranch() {
+        const selected = document.getElementById('branchSelect').value;
+        const info = branchData[selected];
+
+        gsap.to("#branch-info-card", { opacity: 0, y: 15, duration: 0.3, onComplete: () => {
+            document.getElementById('b-name').innerText = info.name;
+            document.getElementById('b-addr').innerText = info.addr;
+            document.getElementById('b-phone').innerText = info.phone;
+            document.getElementById('b-image').src = info.image;
+            gsap.to("#branch-info-card", { opacity: 1, y: 0, duration: 0.5 });
+        }});
+    }
+
+    function toggleTheme() {
+        const html = document.documentElement;
+        const icon = document.getElementById('theme-icon');
+        if (html.classList.contains('dark')) {
+            html.classList.replace('dark', 'light');
+            icon.setAttribute('data-lucide', 'moon');
+        } else {
+            html.classList.replace('light', 'dark');
+            icon.setAttribute('data-lucide', 'sun');
+        }
+        lucide.createIcons();
+    }
+
+    // 4. FIREBASE & EMAIL SERVICES
+    const firebaseConfig = {
+        apiKey: "AIzaSyAjehGT99BpXXFqgx_fPjvcyPqZXaEKt28",
+        authDomain: "adama-hotel-4b573.firebaseapp.com",
+        databaseURL: "https://adama-hotel-4b573-default-rtdb.firebaseio.com", 
+        projectId: "adama-hotel-4b573",
+        storageBucket: "adama-hotel-4b573.firebasestorage.app",
+        messagingSenderId: "37812806794",
+        appId: "1:37812806794:web:c2ff43f8322fbbd82db973"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // !!! IMPORTANT: ADD YOUR EMAILJS PUBLIC KEY HERE !!!
+    emailjs.init("i-yy-f80tog1xhxzB"); 
+
+    // 5. CALENDAR LOGIC
+    let blockedDates = [];
+    const calendarInstances = flatpickr("input[type='date']", {
+        minDate: "today",
+        disable: [],
+        dateFormat: "Y-m-d",
+    });
+
+    db.ref('blockedDates').on('value', (snapshot) => {
+        const data = snapshot.val();
+        blockedDates = data ? Object.values(data) : [];
+        calendarInstances.forEach(inst => inst.set('disable', blockedDates));
+    });
+
+    // 6. FORM SUBMISSION
+    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = {
+            name: document.getElementById('guestName').value,
+            email: document.getElementById('guestEmail').value,
+            phone: document.getElementById('guestPhone').value,
+            branch: document.getElementById('branchSelect').value,
+            checkIn: document.getElementById('checkIn').value,
+            checkOut: document.getElementById('checkOut').value,
+            roomType: document.getElementById('PackageSelect').value,
+            status: 'Pending',
+            timestamp: Date.now()
+        };
+
+        db.ref('bookings').push(formData).then(() => {
+            showSuccessAnim();
+
+            // SEND EMAIL
+            emailjs.send("service_zyz9oiq", "template_yykd3c7", {
+                guest_name: formData.name,
+                room_type: formData.roomType,
+                stay_dates: `${formData.checkIn} to ${formData.checkOut}`,
+                Phone: formData.phone,
+                to_email: "dworkneh613@gmail.com"
+            });
+
+            // WHATSAPP
+            const waMsg = `New Booking!%0AName: ${formData.name}%0ARoom: ${formData.roomType}%0ADates: ${formData.checkIn} to ${formData.checkOut}.%0APlease confirm!`;
+            setTimeout(() => { window.open(`https://wa.me/251913697326?text=${waMsg}`, '_blank'); }, 2500);
+        });
+    });
+
+    function showSuccessAnim() {
+        const overlay = document.createElement('div');
+        overlay.className = "fixed inset-0 z-[500] flex items-center justify-center bg-black/95 backdrop-blur-xl";
+        overlay.innerHTML = `
+            <div class='text-center'>
+                <div class="w-20 h-20 border-4 border-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i data-lucide="check" class="text-[#D4AF37] w-10 h-10"></i>
+                </div>
+                <h2 class='text-5xl font-black text-white uppercase mb-4'>Reservation Sent</h2>
+                <p class='text-[#D4AF37] uppercase tracking-widest text-xs'>Opening WhatsApp...</p>
+            </div>`;
+        document.body.appendChild(overlay);
+        lucide.createIcons();
+        gsap.from(overlay.firstChild, { scale: 0.5, opacity: 0, duration: 1, ease: "expo.out" });
+    }
+</script>
+</body>
+</html>

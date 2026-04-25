@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nexus Admin | Adama Hotel Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&display=swap" rel="stylesheet">
+    <style>
+        body { background: #0a0a0a; color: white; font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-gold { background: #D4AF37; color: black; font-weight: bold; }
+        .status-confirmed { color: #4ade80; }
+        .status-pending { color: #fbbf24; }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+    <!-- Login Screen -->
+    <div id="login-screen" class="fixed inset-0 z-[300] flex items-center justify-center bg-black">
+        <div class="glass p-10 rounded-[40px] w-full max-w-md text-center">
+            <h1 class="text-3xl font-black text-[--gold] mb-8 tracking-tighter uppercase">Nexus Admin Access</h1>
+            <input type="password" id="adminPass" placeholder="Security Key" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl mb-4 outline-none focus:border-[#D4AF37]">
+            <button onclick="checkAuth()" class="btn-gold w-full py-4 rounded-xl uppercase tracking-widest text-xs">Unlock Dashboard</button>
+            <p class="mt-8 text-[10px] opacity-30 uppercase tracking-[0.4em]">Nexus Special Solution | 2026</p>
+\        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden">
+        <header class="flex justify-between items-center mb-10">
+            <h2 class="text-2xl font-black uppercase tracking-tighter">Live Booking <span class="text-[#D4AF37]">Feed</span></h2>
+            <button onclick="location.reload()" class="text-xs opacity-50 uppercase tracking-widest border border-white/10 px-4 py-2 rounded-full">Logout</button>
+        </header>
+
+        <div class="grid lg:grid-cols-4 gap-6">
+            <!-- Sidebar: Calendar Manager -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="glass p-6 rounded-3xl">
+                    <h3 class="text-sm font-bold uppercase text-[#D4AF37] mb-4">Block Dates</h3>
+                    <input type="date" id="blockDate" class="w-full bg-white/5 border border-white/10 p-3 rounded-lg mb-3">
+                    <button onclick="addBlockedDate()" class="w-full bg-white/10 py-3 rounded-lg text-xs uppercase font-bold">Add to Blacklist</button>
+                </div>
+                
+                <div class="glass p-6 rounded-3xl">
+                    <h3 class="text-sm font-bold uppercase mb-4">Room Availability</h3>
+                    <div class="flex justify-between items-center mb-2"><span class="text-xs">VIP Suites</span><span class="bg-green-500/20 text-green-500 text-[9px] px-2 py-1 rounded">AVAILABLE</span></div>
+                    <div class="flex justify-between items-center"><span class="text-xs">Single Standard</span><span class="bg-red-500/20 text-red-500 text-[9px] px-2 py-1 rounded">FULL</span></div>
+                </div>
+            </div>
+
+            <!-- Table: Live Bookings -->
+            <div class="lg:col-span-3">
+                <div class="glass rounded-[40px] overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead class="bg-white/5 text-[10px] uppercase tracking-widest opacity-50">
+                           <tr>
+                                <th class="p-6">Guest</th>
+                                <th class="p-6">Stay Dates</th>
+                                <th class="p-6">Room / Branch</th>
+                                <th class="p-6">Status</th>
+                                <th class="p-6">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="booking-table-body">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // 1. FIREBASE CONFIGURATION (Must match booking.html exactly)
+    const firebaseConfig = {
+    apiKey: "AIzaSyAjehGT99BpXXFqgx_fPjvcyPqZXaEKt28",
+    authDomain: "adama-hotel-4b573.firebaseapp.com",
+    projectId: "adama-hotel-4b573",
+    storageBucket: "adama-hotel-4b573.firebasestorage.app",
+    messagingSenderId: "37812806794",
+    appId: "1:37812806794:web:c2ff43f8322fbbd82db973"
+  };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 2. SECURITY CHECK
+    function checkAuth() {
+        const passInput = document.getElementById('adminPass').value;
+        
+        // SET YOUR PASSWORD HERE
+        if(passInput === "Nexus2026") { 
+            gsap.to("#login-screen", { opacity: 0, scale: 1.1, duration: 0.5, onComplete: () => {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                loadDashboardData();
+            }});
+        } else {
+            alert("Access Denied: Invalid Security Key");
+        }
+    }
+
+    // 3. LIVE DATA SYNC
+    function loadDashboardData() {
+        // Listen to 'bookings' node
+        db.ref('bookings').on('value', (snapshot) => {
+            const list = snapshot.val();
+            const container = document.getElementById('booking-table-body');
+            container.innerHTML = '';
+
+            if(!list) {
+                container.innerHTML = '<tr><td colspan="5" class="p-10 text-center opacity-30 uppercase tracking-widest text-xs">No bookings found</td></tr>';
+                return;
+            }
+
+            for(let id in list) {
+                const b = list[id];
+                // Clean phone for WhatsApp link
+                const cleanPhone = b.phone.replace(/\D/g, ''); 
+
+                container.innerHTML += `
+                    <tr class="border-b border-white/5 hover:bg-white/[0.02] transition">
+                        <td class="p-6">
+                            <div class="font-bold">${b.name}</div>
+                            <div class="text-[10px] opacity-40">${b.phone}</div>
+                        </td>
+                        <td class="p-6 text-xs font-mono text-[#D4AF37]">${b.checkIn} <span class="text-white opacity-20 mx-2">/</span> ${b.checkOut}</td>
+                        <td class="p-6">
+                            <div class="text-[10px] uppercase font-bold text-white">${b.roomType}</div>
+                            <div class="text-[9px] opacity-40 uppercase tracking-tighter">${b.branch}</div>
+                        </td>
+                        <td class="p-6">
+                            <select onchange="updateStatus('${id}', this.value)" class="bg-black border border-white/10 rounded px-2 py-1 text-[10px] uppercase outline-none focus:border-[#D4AF37]">
+                                <option value="Pending" ${b.status==='Pending'?'selected':''}>Pending</option>
+                                <option value="Confirmed" ${b.status==='Confirmed'?'selected':''}>Confirmed</option>
+                                <option value="Canceled" ${b.status==='Canceled'?'selected':''}>Canceled</option>
+                            </select>
+                        </td>
+                        <td class="p-6 flex gap-3">
+                            <a href="tel:${b.phone}" class="p-2 bg-white/5 rounded-lg hover:bg-[#D4AF37] hover:text-black transition">
+                                <i data-lucide="phone" class="w-4 h-4"></i>
+                            </a>
+                            <a href="https://wa.me/${cleanPhone}" target="_blank" class="p-2 bg-white/5 rounded-lg hover:bg-green-600 transition">
+                                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                            </a>
+                        </tr>
+                `;
+            }
+            // CRITICAL: Refresh icons after table is built
+            lucide.createIcons();
+        });
+    }
+
+    // 4. UPDATE STATUS
+    function updateStatus(id, newStatus) {
+        db.ref('bookings/' + id).update({ status: newStatus });
+    }
+
+    // 5. BLOCK DATES (Syncs to Guest Calendar)
+    function addBlockedDate() {
+        const dateInput = document.getElementById('blockDate');
+        const dateValue = dateInput.value;
+        
+        if(dateValue) {
+            // Push to blockedDates node
+            db.ref('blockedDates').push(dateValue).then(() => {
+                alert("Date successfully blocked on Guest Calendar");
+                dateInput.value = '';
+            });
+        } else {
+            alert("Please select a date to block");
+        }
+    }
+
+    // Initial Icon load for login screen
+    lucide.createIcons();
+
+
+        function updateStatus(id, newStatus) {
+            db.ref('bookings/' + id).update({ status: newStatus });
+        }
+
+        function addBlockedDate() {
+            const date = document.getElementById('blockDate').value;
+            if(date) db.ref('blockedDates').push(date);
+        }
+    </script>
+</body>
+</html>

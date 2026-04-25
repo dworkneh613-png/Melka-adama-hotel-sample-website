@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700;900&display=swap');
+
+:root {
+    --gold: #D4AF37;
+    --charcoal: #121212;
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+.dark {
+    --bg: var(--charcoal);
+    --text: #ffffff;
+}
+
+.light {
+    --bg: #f8f9fa;
+    --text: var(--charcoal);
+    --glass: rgba(0, 0, 0, 0.05);
+    --glass-border: rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    transition: background-color 0.5s ease;
+}
+
+h1, h2, .font-luxury {
+    font-family: 'Playfair Display', serif;
+}
+
+.glass {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+}
+
+.booking-bar-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--gold);
+    color: inherit;
+    outline: none;
+}
+
+.btn-gold {
+    background-color: var(--gold);
+    color: #000;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+}

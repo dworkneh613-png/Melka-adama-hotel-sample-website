@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Our Branches | Adama Hotel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Midnight Map Filter to match Luxury Dark Theme */
+        .map-container iframe {
+            filter: grayscale(1) invert(0.92) contrast(1.2);
+            border-radius: 40px;
+        }
+        .light .map-container iframe 
+            filter none
+  style>
+        :root {
+            --gold: #D4AF37;
+            --charcoal: #0a0a0a;
+            --pearl: #D4AF37;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .font-luxury { font-family: 'Playfair Display', serif; }
+
+        /* Theme Transitions */
+        .dark { background-color: var(--charcoal); color: #ffffff; }
+        .light { background-color: var(--pearl); color: var(--charcoal); }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .light .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .glass-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        /* Custom Masonry Column Logic */
+        .masonry-grid {
+            column-count: 1;
+            column-gap: 1.5rem;
+        }
+        @media (min-width: 768px) { .masonry-grid { column-count: 2; } }
+        @media (min-width: 1024px) { .masonry-grid { column-count: 3; } }
+        
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Lightbox Layout */
+        #lightbox {
+            display: none;
+            background: rgba(0, 0, 0, 0.849);
+            z-index: 1000;
+        }
+
+        .gold-glow {
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    </style>
+</head>
+<body>
+    <!-- Navigation remains consistent -->
+    <nav class="fixed top-0 w-full z-[100] glass border-b border-white/5 py-5 px-10">
+        <div class="max-w-[1800px] mx-auto flex justify-between items-center">
+            <div class="text-2xl font-black tracking-tighter text-[--gold]">ADAMA HOTEL</div>
+            <div class="hidden lg:flex space-x-12 text-[10px] font-bold uppercase tracking-[0.3em] opacity-70">
+                <a href="index.html" class="hover:text-[--gold] transition">Home</a>
+                <a href="showroom.html" class="hover:text-[--gold] transition">Showroom</a>
+                <a href="packages.html" class="hover:text-[--gold] transition">Packages</a>
+                <a href="booking.html" class="text-[--gold]">Booking</a>
+                <a href="contact.html" class="hover:text-[--gold] transition">Contact</a>
+            </div>
+            <div class="flex items-center gap-6">
+                <button onclick="toggleTheme()" class="p-2 rounded-full border border-[--glass-border] hover:text-[--gold] transition">
+                    <i data-lucide="sun" id="theme-icon"></i>
+                </button>
+                <button class="lg:hidden"><i data-lucide="menu"></i></button>
+            </div>
+        </div>
+    </nav>
+    <main class="pt-40">
+        <div class="container-huge">
+            <div class="text-center mb-32 reveal">
+                <h1 class="text-huge font-black text-black uppercase mb-6">Get in <span class="text-[--gold]">Touch.</span></h1>
+                <p class="text-white/40 uppercase tracking-[0.5em]">Global standards, Ethiopian hospitality.</p>
+            </div>
+
+            <!-- ADAMA BRANCH SECTION -->
+            <section class="grid lg:grid-cols-2 gap-20 items-center mb-40 reveal">
+                <div class="space-y-8">
+                    <span class="text-[--gold] font-black tracking-widest uppercase">Primary Branch</span>
+                    <h2 class="text-6xl font-luxury text-black">Adama <br>Expressway</h2>
+                    <div class="space-y-4 text-black/70 text-xl">
+                        <p class="flex items-center gap-4"><i data-lucide="map-pin" class="text-[--gold]"></i> Main Expressway Entrance, Adama, Ethiopia</p>
+                        <p class="flex items-center gap-4"><i data-lucide="phone" class="text-[--gold]"></i> +251 22 111 2233</p>
+                        <p class="flex items-center gap-4"><i data-lucide="mail" class="text-[--gold]"></i> adama@adamahotel.com</p>
+                    </div>
+                    <div class="pt-6">
+                        <a href="https://maps.google.com" target="_blank" class="btn-gold px-10 py-4 rounded-full font-bold uppercase text-xs inline-block">Open in Google Maps</a>
+                    </div>
+                </div>
+                <div class="map-container h-[600px] w-full glass p-2 rounded-[50px]">
+                    <!-- Real Adama Location Embed -->
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126153.25414841968!2d39.20641215421544!3d8.530366657989396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b1f630f9a2e6f%3A0x6b3b55a8286f0c6c!2sAdama!5e0!3m2!1sen!2set!4v1710500000000!5m2!1sen!2set" 
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </section>
+
+            <!-- ADDIS ABABA BRANCH SECTION -->
+            <section class="grid lg:grid-cols-2 gap-20 items-center mb-40 reveal">
+                <div class="map-container h-[600px] w-full glass p-2 rounded-[50px] lg:order-1 order-2">
+                    <!-- Real Addis Ababa Location Embed (Bole Area) -->
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31533.82420959453!2d38.77701726055531!3d9.001928036109961!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85040f92b719%3A0x7d6f5f3e9a5c8e3!2sBole%2C%20Addis%20Ababa!5e0!3m2!1sen!2set!4v1710500000000!5m2!1sen!2set" 
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                <div class="space-y-8 lg:order-2 order-1">
+                    <span class="text-[--gold] font-black tracking-widest uppercase">Metropolitan Branch</span>
+                    <h2 class="text-6xl font-luxury text-black">Addis Ababa <br>Royal</h2>
+                    <div class="space-y-4 text-black/70 text-xl">
+                        <p class="flex items-center gap-4"><i data-lucide="map-pin" class="text-[--gold]"></i> Bole, Royal Enclosure District, Addis Ababa</p>
+                        <p class="flex items-center gap-4"><i data-lucide="phone" class="text-[--gold]"></i> +251 58 444 5566</p>
+                        <p class="flex items-center gap-4"><i data-lucide="mail" class="text-[--gold]"></i> addis@adamahotel.com</p>
+                    </div>
+                    <div class="pt-6">
+                        <a href="https://maps.google.com" target="_blank" class="btn-gold px-10 py-4 rounded-full font-bold uppercase text-xs inline-block">Open in Google Maps</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Global Inquiry Form (Wide Style) -->
+            <section class="glass p-20 rounded-[60px] mb-40 reveal">
+                <div class="max-w-4xl mx-auto text-center mb-16">
+                    <h3 class="text-5xl font-luxury text-dark mb-4">Direct Inquiry</h3>
+                    <p class="text-dark/40">Our concierge team will respond within 15 minutes.</p>
+                </div>
+                <form class="grid md:grid-cols-2 gap-10">
+                    <input type="text" placeholder="Your Name" class="booking-bar-input py-6 text-xl text-dark">
+                    <input type="email" placeholder="Email Address" class="booking-bar-input py-6 text-xl text-dark">
+                    <select class="booking-bar-input py-6 text-xl text-dark md:col-span-2">
+                        <option>General Inquiry</option>
+                        <option>Event/Wedding Hosting</option>
+                        <option>Corporate Partnership</option>
+                    </select>
+                    <textarea placeholder="Tell us how we can make your visit perfect..." class="booking-bar-input py-6 text-xl text-dark md:col-span-2 h-40"></textarea>
+                    <div class="md:col-span-2 text-center">
+                        <button class="btn-gold px-20 py-6 rounded-full font-black uppercase tracking-tighter">Submit Message</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </main>
+ 
+    <!-- Contact Section -->
+    <section id="contact" class="py-32 px-8 bg-white text-black">
+        <div class="max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
+            <div>
+                <h2 class="text-7xl font-extrabold tracking-tighter leading-none mb-12">Contact <br/>Us.</h2>
+                <div class="space-y-12">
+                    <!-- Social Media Links (Replaced Phone) -->
+                    <div class="flex items-center gap-8">
+                        <a href="https://wa.me/251913697326" target="_blank" class="hover:scale-125 transition-transform text-cyan-600">
+                            <i data-lucide="message-circle" class="w-10 h-10"></i>
+                        </a>
+                        <a href="https://t.me/Dave_3210" target="_blank" class="hover:scale-125 transition-transform text-cyan-600">
+                            <i data-lucide="send" class="w-10 h-10"></i>
+                        </a>
+                        <a href="https://www.tiktok.com/@davegamer121" target="_blank" class="hover:scale-125 transition-transform text-cyan-600">
+                            <i data-lucide="music-2" class="w-10 h-10"></i>
+                        </a>
+                    </div>
+                    
+                    <a href="mailto:dworkneh613@gmail.com" class="text-2xl font-light hover:underline flex items-center gap-4">
+                        <i data-lucide="mail"></i> dworkneh613@gmail.com
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer with Dawit Workneh branding -->
+    <footer class="py-12 bg-agency-black text-center text-neutral-700 text-[10px] font-bold uppercase tracking-[0.4em]">
+        © 2026 DAWIT WORKNEH • Specialized Digital Solutions
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        lucide.createIcons();
+        // Intersection Observer for the "Huge" scroll reveal effect
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+              document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+              // Lightbox Logic
+        function openLightbox(item) {
+            const lb = document.getElementById('lightbox');
+            const img = document.getElementById('lb-img');
+            const panel = document.getElementById('lb-panel');
+            
+            document.getElementById('lb-title').innerText = item.title;
+            document.getElementById('lb-desc').innerText = item.desc;
+            document.getElementById('lb-price').innerText = item.price;
+            img.src = item.img;
+
+            lb.style.display = 'flex';
+            gsap.to(img, { opacity: 1, scale: 1, duration: 0.8, ease: "power4.out" });
+            gsap.to(panel, { opacity: 1, x: 0, duration: 0.8, delay: 0.2, ease: "power4.out" });
+        }
+
+        function closeLightbox() {
+            const lb = document.getElementById('lightbox');
+            gsap.to("#lb-img", { opacity: 0, scale: 0.9, duration: 0.4 });
+            gsap.to("#lb-panel", { opacity: 0, x: 20, duration: 0.4, onComplete: () => lb.style.display = 'none' });
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            if(html.classList.contains('dark')) {
+                html.classList.replace('dark', 'light');
+            } else {
+                html.classList.replace('light', 'dark');
+            }
+        }
+
+        initGrid();
+    </script>
+</body>
+</html>
